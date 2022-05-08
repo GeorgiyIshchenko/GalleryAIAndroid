@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,10 +53,14 @@ public class PhotoViewActivity extends AppCompatActivity {
         tvTag = findViewById(R.id.tv_photo_name);
 
         intent = getIntent();
-        Picasso.with(this).load(MainActivity.DEVELOP_URL+intent.getStringExtra("url")).into(photoView);
+        String path = intent.getStringExtra("path");
+        if (!path.equals("null")){
+            Bitmap imageBitmap = BitmapFactory.decodeFile(path);
+            photoView.setImageBitmap(imageBitmap);
+        }
+        else Picasso.with(this).load(MainActivity.DEVELOP_URL+intent.getStringExtra("url")).into(photoView);
         tvTag.setText(intent.getStringExtra("tag_name"));
         tvDate.setText(intent.getStringExtra("created_at"));
-        tvDescription.setText(intent.getStringExtra("description"));
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override

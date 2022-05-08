@@ -8,25 +8,39 @@ public class Photo {
 
     public long id;
     public String url;
+    public String full_image_url;
     public String description;
     public String createdAt;
     public String tagName;
     public boolean match;
+    public boolean isAiTag;
     public File file;
+    public String devicePath;
     public Uri uri;
 
-    public Photo(long id, String url, String description, String createdAt, String tagName, boolean match, File file, Uri uri) {
+    public Photo(long id, String url, String full_image_url, String description, String createdAt, String tagName, boolean match, boolean isAiTag, File file, Uri uri, String devicePath) {
         this.id = id;
         this.url = url;
+        this.full_image_url = full_image_url;
         this.description = description;
         this.createdAt = createdAt;
         this.match = match;
+        this.isAiTag = isAiTag;
         this.tagName = tagName;
         this.file = file;
         this.uri = uri;
+        this.devicePath = devicePath;
     }
 
     public Photo() {
+    }
+
+    public String getDevicePath() {
+        return devicePath;
+    }
+
+    public void setDevicePath(String devicePath) {
+        this.devicePath = devicePath;
     }
 
     public String getTagName() {
@@ -73,11 +87,6 @@ public class Photo {
         return match;
     }
 
-    public String getStatus() {
-        if (this.match) return "n";
-        return "b";
-    }
-
     public void setMatch(boolean match) {
         this.match = match;
     }
@@ -96,5 +105,21 @@ public class Photo {
 
     public void setUri(Uri uri) {
         this.uri = uri;
+    }
+
+    public String getFull_image_url() {
+        return full_image_url;
+    }
+
+    public void setFull_image_url(String full_image_url) {
+        this.full_image_url = full_image_url;
+    }
+
+    public boolean isAiTag() {
+        return isAiTag;
+    }
+
+    public void setAiTag(boolean aiTag) {
+        isAiTag = aiTag;
     }
 }

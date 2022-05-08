@@ -5,25 +5,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".data_set_creation.MatchPhotoCreationFragment">
+    tools:context=".data_set_creation.MatchPhotoCreationFragment"
+    android:background="@color/purple_500">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
-        android:textSize="24sp"
-        android:text="Выберите не менее 10 фото, которые вам подходят"
-        android:gravity="center"
-        android:layout_gravity="center"/>
+        android:layout_marginHorizontal="20dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/card_style"
+        android:padding="20dp">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_match"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="150dp"
-        android:background="@color/green"
-        android:text="ОК"
-        android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/gray"
+            android:text="Выберите не менее 20 фото, которые вам подходят"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_match"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/btn_style"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="Галерея"
+            android:textAllCaps="false"
+            android:paddingBottom="3dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 
 
 </FrameLayout>

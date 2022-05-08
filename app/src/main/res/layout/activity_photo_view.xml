@@ -18,7 +18,7 @@
             android:id="@+id/img_photo_view"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             android:src="@drawable/cat1"/>
 
         <LinearLayout
@@ -56,7 +56,6 @@
             android:layout_marginTop="4dp"
             android:textSize="16dp"
             android:textColor="@color/light"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
             android:layout_marginHorizontal="16dp"/>
 
 

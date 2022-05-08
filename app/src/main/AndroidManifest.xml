@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryII"
         android:usesCleartextTraffic="true">
-        <activity android:name=".data_set_creation.SinglePhotoCreationActivity"></activity>
+        <activity android:name=".LoadPhotosActivity"></activity>
+        <activity android:name=".data_set_creation.SinglePhotoCreationActivity" />
         <activity android:name=".data_set_creation.DataSetCreationActivity" />
         <activity android:name=".PhotoViewActivity" />
         <activity android:name=".auth.AuthActivity" />

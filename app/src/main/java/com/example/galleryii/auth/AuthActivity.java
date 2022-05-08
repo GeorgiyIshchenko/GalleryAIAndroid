@@ -83,6 +83,7 @@ public class AuthActivity extends AppCompatActivity {
             String result = null;
             if (login != null && password != null) {
                 String url = MainActivity.DEVELOP_URL+"/api/users/auth/";
+                Log.d("auth_log", url);
                 OkHttpClient client = new OkHttpClient();
                 RequestBody body = new FormBody.Builder().add("email", login).add("password", password).build();
                 Log.d("auth", body.toString());
@@ -94,13 +95,13 @@ public class AuthActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            Log.d("auth_log", result);
             return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d("auth", s);
             if (s != null) {
                 try {
                     JSONObject user = new JSONObject(s);

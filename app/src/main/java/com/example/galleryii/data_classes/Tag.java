@@ -13,6 +13,7 @@ public class Tag {
     }
 
     public Tag() {
+        photos = new ArrayList<>();
     }
 
     public String getName() {

@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/img_photo_item"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:layout_height="120dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

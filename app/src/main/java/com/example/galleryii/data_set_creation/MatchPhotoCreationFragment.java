@@ -26,8 +26,8 @@ public class MatchPhotoCreationFragment extends Fragment {
         btnMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((DataSetCreationActivity) Objects.requireNonNull(getActivity())).pickImagesIntent(true, getContext());
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.data_set_creation, new NotMatchPhotoCreationFragment()).addToBackStack("not_match").commit();
+                ((DataSetCreationActivity) Objects.requireNonNull(getActivity())).pickImagesIntent( true, getContext(), false);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.data_set_creation, new NotMatchPhotoCreationFragment()).commit();
             }
         });
         return view;

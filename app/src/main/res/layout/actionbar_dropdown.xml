@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal"
+    android:background="@color/purple_500">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Проект"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/project_spinner"
+        android:layout_width="match_parent"
+        android:layout_marginTop="6dp"
+        android:layout_height="40dp"
+        android:background="@color/purple_500"
+        android:spinnerMode="dropdown"
+        android:layout_weight="1"/>
+
+
+
+</LinearLayout>

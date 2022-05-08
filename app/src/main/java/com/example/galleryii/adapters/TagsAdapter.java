@@ -55,7 +55,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         holder.getTagNameTV().setText(tags.get(position).name);
         PhotosAdapter adapter = new PhotosAdapter(tags.get(position).photos);
-        holder.getPhotosRV().setLayoutManager(new GridLayoutManager(holder.getPhotosRV().getContext(), 3, GridLayoutManager.VERTICAL, true));
+        holder.getPhotosRV().setLayoutManager(new GridLayoutManager(holder.getPhotosRV().getContext(), 3, GridLayoutManager.VERTICAL, false));
         holder.getPhotosRV().setAdapter(adapter);
     }
 

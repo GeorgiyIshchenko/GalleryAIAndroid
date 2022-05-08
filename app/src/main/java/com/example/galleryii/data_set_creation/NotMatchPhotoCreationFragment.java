@@ -29,8 +29,7 @@ public class NotMatchPhotoCreationFragment extends Fragment {
         btnNotMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((DataSetCreationActivity) Objects.requireNonNull(getActivity())).pickImagesIntent(false, getContext());
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                ((DataSetCreationActivity) Objects.requireNonNull(getActivity())).pickImagesIntent( false, getContext(), true);
             }
         });
         return view;

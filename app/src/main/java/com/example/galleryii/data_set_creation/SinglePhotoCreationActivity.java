@@ -34,7 +34,7 @@ public class SinglePhotoCreationActivity extends AppCompatActivity {
     AppCompatButton btnMatch, btnNotMatch;
     ImageView imageView;
 
-    String status;
+    boolean match;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class SinglePhotoCreationActivity extends AppCompatActivity {
         btnMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                status = "n";
+                match = true;
                 SendPhoto sendPhoto = new SendPhoto();
                 sendPhoto.execute();
             }
@@ -61,7 +61,7 @@ public class SinglePhotoCreationActivity extends AppCompatActivity {
         btnNotMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                status = "b";
+                match = false;
                 SendPhoto sendPhoto = new SendPhoto();
                 sendPhoto.execute();
             }
@@ -75,15 +75,15 @@ public class SinglePhotoCreationActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             try {
                 SharedPreferences sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
-                String id = sp.getString(MainActivity.USER_ID, null);
+                int tagId = sp.getInt(MainActivity.CURRENT_TAG, -1);
                 String url = MainActivity.DEVELOP_URL+"/api/photos/post/";
                 OkHttpClient client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(180, TimeUnit.SECONDS).readTimeout(180, TimeUnit.SECONDS).build();
                 RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                         .addFormDataPart("image", photo.getName(), RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), photo))
-                        .addFormDataPart("description", "описание")
-                        .addFormDataPart("status", status)
-                        .addFormDataPart("user", id)
+                        .addFormDataPart("match", String.valueOf(match))
                         .addFormDataPart("is_ai_tag", "false")
+                        .addFormDataPart("tag", String.valueOf(tagId))
+                        .addFormDataPart("device_path", photo.getAbsolutePath())
                         .build();
                 Request request = new Request.Builder().url(url).post(body).build();
                 Response response = client.newCall(request).execute();
