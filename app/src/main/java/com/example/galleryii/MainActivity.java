@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CURRENT_TAG = "current_tag";
 
 
-    public static String DEVELOP_URL = "http://192.168.8.7:8000";
+    public static String DEVELOP_URL = "http://192.168.56.1:8000";
 
     SharedPreferences sp;
     SharedPreferences.Editor editor;
@@ -270,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             assert (s != null);
             try {
-
                 tags = new ArrayList<>();
                 JSONObject project = new JSONObject(s);
                 JSONArray photosJSON = project.getJSONArray("photos");
@@ -297,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                         photo.full_image_url = photoJSON.getString("full_image");
                         photo.match = photoJSON.getBoolean("match");
                         photo.isAiTag = photoJSON.getBoolean("is_ai_tag");
+                        photo.score = photoJSON.getInt("score");
                         photo.createdAt = photoJSON.getString("created_at");
                         photo.devicePath = photoJSON.getString("device_path");
                         if (photo.match && photo.isAiTag) matchList.add(photo);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,89 +7,114 @@
     android:layout_height="match_parent"
     tools:context=".PhotoViewActivity"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/purple_500">
+
+    <ImageView
+        android:id="@+id/img_photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cat1"
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/img_photo_view"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/cat1"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="16dp">
-
-            <TextView
-                android:id="@+id/tv_photo_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:text="Кот"/>
-
-            <TextView
-                android:id="@+id/tv_photo_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="right"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text="10.02.2022"/>
-
-        </LinearLayout>
-
+        android:orientation="vertical"
+        android:background="@drawable/card_style"
+        android:layout_margin="10dp">
 
         <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_photo_score"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16dp"
-            android:textColor="@color/light"
-            android:layout_marginHorizontal="16dp"/>
+            android:text="87%: Match"
+            android:textSize="32dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/tv_card_style"
+            android:layout_gravity="center_horizontal"/>
+
+        <!--<TextView
+            android:id="@+id/tv_photo_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/purple_500"
+            android:text="Проект: Кот"/>-->
+
+        <TextView
+            android:id="@+id/tv_photo_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginTop="20dp"
+            android:textSize="24sp"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/purple_500"
+            android:text="Дата: 10.02.2022"
+            android:layout_marginBottom="20dp"/>
 
 
     </LinearLayout>
 
 
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:layout_gravity="bottom|center_horizontal">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_delete"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="70dp"
-            android:src="@drawable/ic_baseline_delete_forever_24"
-            android:backgroundTint="@color/red"/>
+            android:backgroundTint="@color/red"
+            android:text="Удалить"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_weight="1"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_share"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_baseline_share_24"
-            android:layout_marginLeft="70dp"
-            android:backgroundTint="@color/blue"/>
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:text="поделиться"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
 
 
-    </FrameLayout>
+    </LinearLayout>
 
 
 
-</FrameLayout>
+</LinearLayout>

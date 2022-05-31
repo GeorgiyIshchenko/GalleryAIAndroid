@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     android:id="@+id/photo_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -11,5 +11,18 @@
         android:scaleType="centerCrop"
         android:layout_height="120dp"/>
 
+    <TextView
+        android:id="@+id/img_photo_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/photo_style"
+        android:layout_gravity="bottom"
+        android:textSize="20dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/light"
+        android:textStyle="bold"
+        android:text="80%"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

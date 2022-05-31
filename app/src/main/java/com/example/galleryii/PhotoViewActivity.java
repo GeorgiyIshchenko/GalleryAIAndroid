@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -34,8 +35,8 @@ import okhttp3.Response;
 public class PhotoViewActivity extends AppCompatActivity {
 
     ImageView photoView;
-    FloatingActionButton btnDelete, btnShare;
-    TextView tvDescription, tvDate, tvTag;
+    ExtendedFloatingActionButton btnDelete, btnShare;
+    TextView tvDate, tvTag, tvScore;
 
     Intent intent;
     SharedPreferences sp;
@@ -48,20 +49,30 @@ public class PhotoViewActivity extends AppCompatActivity {
         photoView = findViewById(R.id.img_photo_view);
         btnDelete = findViewById(R.id.button_delete);
         btnShare = findViewById(R.id.button_share);
-        tvDescription = findViewById(R.id.tv_description);
         tvDate = findViewById(R.id.tv_photo_date);
-        tvTag = findViewById(R.id.tv_photo_name);
+        //tvTag = findViewById(R.id.tv_photo_name);
+        tvScore = findViewById(R.id.tv_photo_score);
 
         intent = getIntent();
         String path = intent.getStringExtra("path");
-        if (!path.equals("null")){
+        if (!path.equals("null")) {
             Bitmap imageBitmap = BitmapFactory.decodeFile(path);
-            photoView.setImageBitmap(imageBitmap);
+            if (imageBitmap != null) photoView.setImageBitmap(imageBitmap);
+            else
+                Picasso.with(this).load(MainActivity.DEVELOP_URL + intent.getStringExtra("url")).into(photoView);
+        } else
+            Picasso.with(this).load(MainActivity.DEVELOP_URL + intent.getStringExtra("url")).into(photoView);
+        //tvTag.setText(intent.getStringExtra("tag_name"));
+        String date = "Загружено:\b" + intent.getStringExtra("created_at");
+        tvDate.setText(date);
+        String score;
+        if (intent.getBooleanExtra("match", true)){
+            score = String.valueOf(intent.getIntExtra("score", 0)) + "%:\bMatch";
         }
-        else Picasso.with(this).load(MainActivity.DEVELOP_URL+intent.getStringExtra("url")).into(photoView);
-        tvTag.setText(intent.getStringExtra("tag_name"));
-        tvDate.setText(intent.getStringExtra("created_at"));
-
+        else{
+            score = String.valueOf(intent.getIntExtra("score", 0)) + "%:\bDon't match";
+        }
+        tvScore.setText(score);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +92,7 @@ public class PhotoViewActivity extends AppCompatActivity {
                 sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
                 String id = sp.getString(MainActivity.USER_ID, null);
                 OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url(new URL(MainActivity.DEVELOP_URL+"/api/"+id+"/photos/"+intent.getIntExtra("id", 0)+"/delete")).delete().build();
+                Request request = new Request.Builder().url(new URL(MainActivity.DEVELOP_URL + "/api/" + id + "/photos/" + intent.getIntExtra("id", 0) + "/delete")).delete().build();
                 Response response = client.newCall(request).execute();
                 String s = response.body().string();
                 Log.d("request", s);

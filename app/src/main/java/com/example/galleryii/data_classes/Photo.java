@@ -14,16 +14,18 @@ public class Photo {
     public String tagName;
     public boolean match;
     public boolean isAiTag;
+    public int score;
     public File file;
     public String devicePath;
     public Uri uri;
 
-    public Photo(long id, String url, String full_image_url, String description, String createdAt, String tagName, boolean match, boolean isAiTag, File file, Uri uri, String devicePath) {
+    public Photo(long id, String url, String full_image_url, String description, String createdAt, String tagName, int score, boolean match, boolean isAiTag, File file, Uri uri, String devicePath) {
         this.id = id;
         this.url = url;
         this.full_image_url = full_image_url;
         this.description = description;
         this.createdAt = createdAt;
+        this.score = score;
         this.match = match;
         this.isAiTag = isAiTag;
         this.tagName = tagName;
@@ -121,5 +123,13 @@ public class Photo {
 
     public void setAiTag(boolean aiTag) {
         isAiTag = aiTag;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

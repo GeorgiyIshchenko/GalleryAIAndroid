@@ -66,7 +66,7 @@ public class LoadPhotosActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             SharedPreferences sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
             int tagId = sp.getInt(MainActivity.CURRENT_TAG, -1);
-            String url = MainActivity.DEVELOP_URL + "/api/photos/post/";
+            String url = MainActivity.DEVELOP_URL + "/api/photos/post/prediction";
             OkHttpClient client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(180, TimeUnit.SECONDS).readTimeout(180, TimeUnit.SECONDS).build();
             for (Photo photo : taskPhotos) {
                 RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
