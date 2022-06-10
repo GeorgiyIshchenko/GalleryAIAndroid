@@ -95,7 +95,12 @@ public class AuthActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            Log.d("auth_log", result);
+            try {
+                Log.d("auth_log", result);
+            }
+            catch (RuntimeException e){
+                e.printStackTrace();
+            }
             return result;
         }
 

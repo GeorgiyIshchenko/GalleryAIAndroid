@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CURRENT_TAG = "current_tag";
 
 
-    public static String DEVELOP_URL = "http://192.168.56.1:8000";
+    public static String DEVELOP_URL = "http://192.168.0.101:8000";
 
     SharedPreferences sp;
     SharedPreferences.Editor editor;
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (currentProj.isTrained) {
-                    startActivity(new Intent(MainActivity.this, LoadPhotosActivity.class));
+                    startActivity(new Intent(MainActivity.this, PredictionActivity.class));
                 } else {
                     Toast.makeText(MainActivity.this, "Перед предсказанием обучите нейросеть", Toast.LENGTH_LONG).show();
                 }
@@ -209,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d("projects", s);
             try {
                 JSONArray jsonArray = new JSONArray(s);
                 projects = new ArrayList<>();
@@ -240,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
                 GetPhotoList getPhotoList = new GetPhotoList();
                 getPhotoList.execute();
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
                 e.printStackTrace();
             }
         }
@@ -296,9 +297,17 @@ public class MainActivity extends AppCompatActivity {
                         photo.full_image_url = photoJSON.getString("full_image");
                         photo.match = photoJSON.getBoolean("match");
                         photo.isAiTag = photoJSON.getBoolean("is_ai_tag");
-                        photo.score = photoJSON.getInt("score");
+                        if (photo.isAiTag)
+                            photo.score = photoJSON.getInt("score");
                         photo.createdAt = photoJSON.getString("created_at");
-                        photo.devicePath = photoJSON.getString("device_path");
+                        try {
+                            photo.devicePath = photoJSON.getString("device_path");
+                            photo.uri = Uri.fromFile(new File(photoJSON.getString("device_uri")));
+                            Log.d("photo_uri", photo.uri.getPath()+" "+photoJSON.getString("device_path"));
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                         if (photo.match && photo.isAiTag) matchList.add(photo);
                         else if (photo.match && !photo.isAiTag) matchListTrained.add(photo);
                         else if (!photo.match && photo.isAiTag) notMatchList.add(photo);
@@ -308,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                Log.d("request", matchList.size()+" "+notMatchList.size()+" "+matchListTrained.size()+" "+notMatchListTrained.size());
                 match.photos = matchList;
                 notMatch.photos = notMatchList;
                 matchTrained.photos = matchListTrained;
@@ -316,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 tags.add(notMatch);
                 tags.add(matchTrained);
                 tags.add(notMatchTrained);
-                adapter = new TagsAdapter(tags);
+                adapter = new TagsAdapter(tags, MainActivity.this, MainActivity.this);
                 recyclerView.setAdapter(adapter);
             } catch (JSONException e) {
                 e.printStackTrace();

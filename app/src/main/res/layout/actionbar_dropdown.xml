@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="horizontal"
-    android:background="@color/purple_500">
+    android:background="@color/gray">
 
     <TextView
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="6dp"
         android:layout_height="40dp"
-        android:background="@color/purple_500"
+        android:background="@color/gray"
         android:spinnerMode="dropdown"
         android:layout_weight="1"/>
 

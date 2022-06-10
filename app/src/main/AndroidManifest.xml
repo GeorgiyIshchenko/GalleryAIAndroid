@@ -9,14 +9,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_black"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo_black"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryII"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoadPhotosActivity"></activity>
+        <activity android:name=".PredictionActivity"></activity>
         <activity android:name=".data_set_creation.SinglePhotoCreationActivity" />
         <activity android:name=".data_set_creation.DataSetCreationActivity" />
         <activity android:name=".PhotoViewActivity" />

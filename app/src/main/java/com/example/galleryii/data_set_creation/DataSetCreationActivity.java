@@ -64,7 +64,6 @@ public class DataSetCreationActivity extends AppCompatActivity {
     boolean finish;
     Context context;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +92,9 @@ public class DataSetCreationActivity extends AppCompatActivity {
                         .addFormDataPart("is_ai_tag", "false")
                         .addFormDataPart("tag", String.valueOf(tagId))
                         .addFormDataPart("device_path", photo.getFile().getAbsolutePath())
+                        .addFormDataPart("device_uri", photo.getUri().getPath())
                         .build();
+                Log.d("photo_uri", photo.uri.getPath());
                 Request request = new Request.Builder().url(url).post(body).build();
                 try {
                     client.newCall(request).execute();
@@ -160,9 +161,9 @@ public class DataSetCreationActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, width, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, Integer.valueOf(bitmap.getHeight()/bitmap.getWidth()*width), false);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
         byte[] bitmapdata = bos.toByteArray();
         FileOutputStream fos = null;
         try {
@@ -201,7 +202,7 @@ public class DataSetCreationActivity extends AppCompatActivity {
                         photo.match = this.match;
                         photo.uri = imageUri;
                         try {
-                            photo.file = scaleFile(file, 512);
+                            photo.file = file;
                         } catch (Exception e) {
                             photo.file = file;
                             e.printStackTrace();
@@ -221,7 +222,7 @@ public class DataSetCreationActivity extends AppCompatActivity {
                     photo.uri = imageUri;
                     try {
                         assert file != null;
-                        photo.file = scaleFile(file, 512);
+                        photo.file = file;
                     } catch (Exception e) {
                         photo.file = file;
                         e.printStackTrace();

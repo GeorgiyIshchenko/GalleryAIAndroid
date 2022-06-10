@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -31,7 +30,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LoadPhotosActivity extends AppCompatActivity {
+public class PredictionActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGES_CODE = 501;
 
@@ -73,6 +72,7 @@ public class LoadPhotosActivity extends AppCompatActivity {
                         .addFormDataPart("image", photo.getFile().getName(), RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), photo.getFile()))
                         .addFormDataPart("tag", String.valueOf(tagId))
                         .addFormDataPart("device_path", photo.getFile().getAbsolutePath())
+                        .addFormDataPart("device_uri", photo.getUri().getPath())
                         .build();
                 Log.d("load_photo_body", body.contentType().toString());
                 Request request = new Request.Builder().url(url).post(body).build();
@@ -120,7 +120,7 @@ public class LoadPhotosActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            startActivity(new Intent(LoadPhotosActivity.this, MainActivity.class));
+            startActivity(new Intent(PredictionActivity.this, MainActivity.class));
             finish();
         }
     }

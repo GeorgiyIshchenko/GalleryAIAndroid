@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/photo_view"
+<FrameLayout android:id="@+id/photo_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/img_photo_item"
-        android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_height="120dp"/>
-
-    <TextView
-        android:id="@+id/img_photo_score"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="@drawable/photo_style"
-        android:layout_gravity="bottom"
-        android:textSize="20dp"
-        android:paddingVertical="10dp"
-        android:textColor="@color/light"
-        android:textStyle="bold"
-        android:text="80%"/>
+        android:elevation="10dp"
+        android:background="@drawable/photo_item_style">
+
+        <ImageView
+            android:id="@+id/img_photo_item"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="120dp"/>
+
+        <TextView
+            android:id="@+id/img_photo_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/photo_style"
+            android:layout_gravity="bottom"
+            android:textSize="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/light"
+            android:textStyle="bold"
+            android:text="80%"/>
+
+    </androidx.cardview.widget.CardView>
 
 
 </FrameLayout>
