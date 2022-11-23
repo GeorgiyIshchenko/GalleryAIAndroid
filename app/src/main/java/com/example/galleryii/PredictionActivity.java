@@ -65,10 +65,12 @@ public class PredictionActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             SharedPreferences sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
             int tagId = sp.getInt(MainActivity.CURRENT_TAG, -1);
-            String url = MainActivity.DEVELOP_URL + "/api/photos/post/prediction";
+            String token = sp.getString(MainActivity.USER_TOKEN, "");
+            String url = MainActivity.DEVELOP_URL + "/api/post_photo_prediction";
             OkHttpClient client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(180, TimeUnit.SECONDS).readTimeout(180, TimeUnit.SECONDS).build();
             for (Photo photo : taskPhotos) {
                 RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token)
                         .addFormDataPart("image", photo.getFile().getName(), RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), photo.getFile()))
                         .addFormDataPart("tag", String.valueOf(tagId))
                         .addFormDataPart("device_path", photo.getFile().getAbsolutePath())
@@ -100,9 +102,8 @@ public class PredictionActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             SharedPreferences sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
             int tagId = sp.getInt(MainActivity.CURRENT_TAG, -1);
-            String user_id = sp.getString(MainActivity.USER_ID, null);
             OkHttpClient client = new OkHttpClient();
-            String url = MainActivity.DEVELOP_URL + "/api/"+user_id+"/tags/" + tagId + "/prediction/";
+            String url = MainActivity.DEVELOP_URL + "/api/start_prediction_project/" + tagId;
             Log.d("request", url);
             try {
                 Request request = new Request.Builder().url(new URL(url)).build();

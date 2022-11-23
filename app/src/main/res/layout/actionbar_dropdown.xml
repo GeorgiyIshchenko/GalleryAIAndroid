@@ -15,7 +15,13 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="@color/white"
-        android:layout_weight="1"/>
+        android:layout_weight="3"/>
+
+    <ImageButton
+        android:id="@+id/reload_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_baseline_replay_24"/>
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/project_spinner"
@@ -24,7 +30,7 @@
         android:layout_height="40dp"
         android:background="@color/gray"
         android:spinnerMode="dropdown"
-        android:layout_weight="1"/>
+        android:layout_weight="2"/>
 
 
 

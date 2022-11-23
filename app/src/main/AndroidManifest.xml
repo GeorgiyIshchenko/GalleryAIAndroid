@@ -16,7 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryII"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PredictionActivity"></activity>
+        <activity
+            android:name=".auth.IPActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".PredictionActivity" />
         <activity android:name=".data_set_creation.SinglePhotoCreationActivity" />
         <activity android:name=".data_set_creation.DataSetCreationActivity" />
         <activity android:name=".PhotoViewActivity" />
@@ -24,11 +35,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

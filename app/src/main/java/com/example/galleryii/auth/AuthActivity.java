@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import okhttp3.FormBody;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -82,11 +83,14 @@ public class AuthActivity extends AppCompatActivity {
             String password = sp.getString(MainActivity.USER_PASSWORD, null);
             String result = null;
             if (login != null && password != null) {
-                String url = MainActivity.DEVELOP_URL+"/api/users/auth/";
+                String url = MainActivity.DEVELOP_URL + "/api/token-auth/";
                 Log.d("auth_log", url);
                 OkHttpClient client = new OkHttpClient();
-                RequestBody body = new FormBody.Builder().add("email", login).add("password", password).build();
-                Log.d("auth", body.toString());
+                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("username", login)
+                        .addFormDataPart("password", password)
+                        .build();
+                Log.d("auth_url", url);
                 Request request = new Request.Builder().url(url).post(body).build();
                 try {
                     Response response = client.newCall(request).execute();
@@ -97,8 +101,7 @@ public class AuthActivity extends AppCompatActivity {
             }
             try {
                 Log.d("auth_log", result);
-            }
-            catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 e.printStackTrace();
             }
             return result;
@@ -111,7 +114,7 @@ public class AuthActivity extends AppCompatActivity {
                 try {
                     JSONObject user = new JSONObject(s);
                     editor = sp.edit();
-                    editor.putString(MainActivity.USER_ID, user.getString("id"));
+                    editor.putString(MainActivity.USER_TOKEN, user.getString("token"));
                     editor.apply();
                     startActivity(new Intent(AuthActivity.this, MainActivity.class));
                 } catch (JSONException e) {

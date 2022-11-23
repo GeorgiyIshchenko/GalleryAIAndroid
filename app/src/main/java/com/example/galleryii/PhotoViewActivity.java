@@ -37,8 +37,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PhotoViewActivity extends AppCompatActivity {
@@ -136,10 +138,12 @@ public class PhotoViewActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             try {
                 sp = getSharedPreferences(MainActivity.AUTH_PREFERENCES, Context.MODE_PRIVATE);
-                String id = sp.getString(MainActivity.USER_ID, null);
+                String token = sp.getString(MainActivity.USER_TOKEN, "");
                 OkHttpClient client = new OkHttpClient();
-                String url = MainActivity.DEVELOP_URL + "/api/" + id + "/photos/" + photoId + "/delete";
-                Request request = new Request.Builder().url(new URL(url)).delete().build();
+                String url = MainActivity.DEVELOP_URL + "/api/photos/" + photoId + "/delete";
+                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token).build();
+                Request request = new Request.Builder().url(new URL(url)).post(body).build();
                 Log.d("delete", url);
                 Response response = client.newCall(request).execute();
                 String s = response.body().string();

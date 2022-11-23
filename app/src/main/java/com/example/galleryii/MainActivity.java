@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,8 +49,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String USER_TOKEN = "token";
     public static final String USER_ID = "user_id";
     public static final String CURRENT_TAG = "current_tag";
+    public static final String IP_VAR = "ip_var";
 
-
-    public static String DEVELOP_URL = "http://192.168.0.101:8000";
+    public static String DEVELOP_URL;
 
     SharedPreferences sp;
     SharedPreferences.Editor editor;
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton buttonExit;
     ExtendedFloatingActionButton buttonLoad;
     Spinner projectDropdown;
+    ImageButton reloadBtn;
 
     ArrayList<Tag> tags;
     TagsAdapter adapter;
@@ -92,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sp = getSharedPreferences(AUTH_PREFERENCES, Context.MODE_PRIVATE);
-        String id = sp.getString(USER_ID, null);
-        if (id == null) {
+        String token = sp.getString(USER_TOKEN, "");
+        Log.d("USER TOKEN", "TOKEN: "+token);
+        if (token.length() == 0) {
             startActivity(new Intent(this, AuthActivity.class));
             finish();
         }
@@ -103,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         buttonExit = findViewById(R.id.button_exit);
         buttonLoad = findViewById(R.id.button_predict);
         recyclerView = findViewById(R.id.rv_tags);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // ActionBar
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -112,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().setElevation(0);
         View view = getSupportActionBar().getCustomView();
         projectDropdown = view.findViewById(R.id.project_spinner);
+        reloadBtn = view.findViewById(R.id.reload_btn);
+        reloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetProjectsList getProjectsList = new GetProjectsList();
+                getProjectsList.execute();
+            }
+        });
 
         GetProjectsList getProjectsList = new GetProjectsList();
         getProjectsList.execute();
@@ -129,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (currentProj.isTrained) {
                     startActivity(new Intent(MainActivity.this, PredictionActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(MainActivity.this, "Перед предсказанием обучите нейросеть", Toast.LENGTH_LONG).show();
                 }
@@ -138,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, DataSetCreationActivity.class));
+                finish();
             }
         });
         buttonExit.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SharedPreferences.Editor editor = sp.edit();
-                        editor.putString(USER_ID, null);
+                        editor.putString(USER_TOKEN, null);
                         editor.apply();
                         startActivity(new Intent(MainActivity.this, AuthActivity.class));
                         finish();
@@ -186,15 +201,22 @@ public class MainActivity extends AppCompatActivity {
         projectDropdown.setOnItemSelectedListener(onItemSelectedListener);
     }
 
+    public void reloadPhotos(){
+        GetPhotoList getPhotoList = new GetPhotoList();
+        getPhotoList.execute();
+    }
+
     class GetProjectsList extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             try {
                 OkHttpClient client = new OkHttpClient();
-                String id = sp.getString(USER_ID, null);
-                String url = DEVELOP_URL + "/api/" + id + "/tags";
-                Request request = new Request.Builder().url(new URL(url)).build();
+                String token = sp.getString(USER_TOKEN, "");
+                String url = DEVELOP_URL + "/api/projects";
+                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM).
+                        addFormDataPart("token", token).build();
+                Request request = new Request.Builder().url(new URL(url)).post(body).build();
                 Response response = client.newCall(request).execute();
                 String s = response.body().string();
                 Log.d("request", s);
@@ -214,7 +236,14 @@ public class MainActivity extends AppCompatActivity {
                 projects = new ArrayList<>();
                 int JSONArraySize = jsonArray.length();
                 String[] dropdownItems = new String[JSONArraySize];
-                for (int i = 0; i < JSONArraySize; i++) {
+
+                Project select_projects = new Project();
+                select_projects.id = -1;
+                select_projects.name = "Выберете проект";
+                projects.add(select_projects);
+                dropdownItems[0] = select_projects.name;
+
+                for (int i = 1; i < JSONArraySize + 1; i++) {
                     JSONObject projectJSON = jsonArray.getJSONObject(i);
                     Project project = new Project();
                     project.id = projectJSON.getInt("id");
@@ -230,11 +259,12 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                 projectDropdown.setAdapter(adapter);
 
-                currentProj = projects.get(0);
-
-                editor = sp.edit();
-                editor.putInt(CURRENT_TAG, projects.get(0).id);
-                editor.apply();
+                if (projects.size() != 0) {
+                    currentProj = projects.get(0);
+                    editor = sp.edit();
+                    editor.putInt(CURRENT_TAG, projects.get(0).id);
+                    editor.apply();
+                }
 
                 GetPhotoList getPhotoList = new GetPhotoList();
                 getPhotoList.execute();
@@ -246,16 +276,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class GetPhotoList extends AsyncTask<String, String, String> {
+    public class GetPhotoList extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String id = sp.getString(USER_ID, null);
+                String token = sp.getString(USER_TOKEN, "");
                 int tagId = sp.getInt(CURRENT_TAG, -1);
-                String url = DEVELOP_URL + "/api/" + id + "/tags/" + String.valueOf(tagId);
+                String url = DEVELOP_URL + "/api/projects/" + String.valueOf(tagId);
                 OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url(new URL(url)).build();
+                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("token", token).build();
+                Request request = new Request.Builder().url(new URL(url)).post(body).build();
                 Response response = client.newCall(request).execute();
                 String s = response.body().string();
                 Log.d("request", s);
@@ -326,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                 tags.add(notMatch);
                 tags.add(matchTrained);
                 tags.add(notMatchTrained);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                 adapter = new TagsAdapter(tags, MainActivity.this, MainActivity.this);
                 recyclerView.setAdapter(adapter);
             } catch (JSONException e) {
@@ -348,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     public String getRealPathFromURI(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);

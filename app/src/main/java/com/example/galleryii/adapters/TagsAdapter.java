@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
@@ -86,7 +87,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
         holder.getBtnDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DeletePhoto deletePhoto = new DeletePhoto(position);
+                DeletePhoto deletePhoto = new DeletePhoto(position, holder.itemView);
                 deletePhoto.execute();
             }
         });
@@ -102,9 +103,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     class DeletePhoto extends AsyncTask<String, String, String> {
 
         int position;
+        View view;
 
-        public DeletePhoto(int position) {
+        public DeletePhoto(int position, View view) {
             this.position = position;
+            this.view = view;
         }
 
         @Override
@@ -114,8 +117,8 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
                 String id = sp.getString(MainActivity.USER_ID, null);
                 OkHttpClient client = new OkHttpClient();
                 for (Photo photo: tags.get(position).photos){
-                    String url = MainActivity.DEVELOP_URL + "/api/" + id + "/photos/" + photo.id + "/delete";
-                    Request request = new Request.Builder().url(new URL(url)).delete().build();
+                    String url = MainActivity.DEVELOP_URL + "/api/photos/" + photo.id + "/delete";
+                    Request request = new Request.Builder().url(new URL(url)).get().build();
                     Log.d("delete", url);
                     Response response = client.newCall(request).execute();
                     String s = response.body().string();
@@ -142,7 +145,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            mainActivity.recreate();
+            ((MainActivity)view.getContext()).reloadPhotos();
         }
     }
 }
